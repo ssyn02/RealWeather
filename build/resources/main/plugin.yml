@@ -1,0 +1,24 @@
+name: "RealWeather"
+version: "1.0.0"
+main: io.github.ssyn02.RealWeather
+description: "Change your minecraft server's weather according to real-time locations"
+libraries:
+  - com.google.code.gson:gson:2.10.1
+  - net.kyori:adventure-api:4.22.0
+api-version: '1.21'
+
+commands:
+  realweather:
+    description: "Root command for RealWeather"
+    usage: "|
+    /realweather - See this message
+    /realweather setapikey - Set the API key
+    /realweather setcity <city> - Set the city to fetch the weather from
+    /realweather reload - Reload the plugin"
+    aliases: [rw, realweather]
+    permission: realweather.use
+    permission-message: "You do not have permission to use this command"
+
+permissions:
+  realweather.use:
+    default: op
