@@ -70,32 +70,6 @@ public class RealWeatherRootCommand implements CommandExecutor {
                 sender.sendMessage(Component.text("Plugin config reloaded.").color(NamedTextColor.YELLOW));
                 return true;
 
-            case "rain":
-                if (!sender.hasPermission("realweather.use")) {
-                    sender.sendMessage(Component.text("You don't have permission.").color(NamedTextColor.RED));
-                    return true;
-                }
-                if (args.length != 1) {
-                    sender.sendMessage(Component.text("Usage: /realweather reload").color(NamedTextColor.YELLOW));
-                    return true;
-                }
-                plugin.rain();
-                sender.sendMessage(Component.text("rain").color(NamedTextColor.YELLOW));
-                return true;
-
-            case "clear":
-                if (!sender.hasPermission("realweather.use")) {
-                    sender.sendMessage(Component.text("You don't have permission.").color(NamedTextColor.RED));
-                    return true;
-                }
-                if (args.length != 1) {
-                    sender.sendMessage(Component.text("Usage: /realweather reload").color(NamedTextColor.YELLOW));
-                    return true;
-                }
-                plugin.clear();
-                sender.sendMessage(Component.text("clear").color(NamedTextColor.YELLOW));
-                return true;
-
             default:
                 return true;
         }

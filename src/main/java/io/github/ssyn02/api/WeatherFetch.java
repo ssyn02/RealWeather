@@ -24,25 +24,25 @@ public class WeatherFetch {
 
     public void fetchWeather(String city, String apiKey) {
         if (city == null || city.isEmpty() || apiKey == null || apiKey.isEmpty()) {
-            plugin.getLogger().warning("City or API key is missing — cannot fetch weather.");
+            plugin.getLogger().warning("City or API key is missing.");
             return;
         }
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 String urlStr = "https://api.weatherapi.com/v1/current.json?key=" + apiKey +
-                        "&q=" + city.replace(" ", "%20") + "&aqi=no";
+                        "&q=" + city.replace(" ", "%20");
 
                 URI uri = URI.create(urlStr);
-                HttpURLConnection conn = (HttpURLConnection) uri.toURL().openConnection();
-                conn.setRequestMethod("GET");
+                HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
+                connection.setRequestMethod("GET");
 
-                if (conn.getResponseCode() != 200) {
-                    plugin.getLogger().warning("Failed to fetch weather: HTTP " + conn.getResponseCode());
+                if (connection.getResponseCode() != 200) {
+                    plugin.getLogger().warning("Failed to fetch weather: HTTP " + connection.getResponseCode());
                     return;
                 }
 
-                InputStreamReader reader = new InputStreamReader(conn.getInputStream());
+                InputStreamReader reader = new InputStreamReader(connection.getInputStream());
                 JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
 
                 JsonObject current = json.getAsJsonObject("current");
@@ -52,8 +52,7 @@ public class WeatherFetch {
                 boolean isDay = current.get("is_day").getAsInt() == 1;
 
                 plugin.getLogger().info("Weather in " + city + ": " + description + " (" + tempC + "°C)");
-
-                // Optional: store this info in fields or apply to the world (e.g., rain, thunder, etc.)
+                
                 applyWeatherToWorld(condition);
 
             } catch (Exception e) {
@@ -70,7 +69,7 @@ public class WeatherFetch {
             Bukkit.getWorlds().forEach(world -> {
                 world.setStorm(rain);
                 world.setThundering(thunder);
-                world.setWeatherDuration(20 * 60 * 5); // 5 minutes
+                world.setWeatherDuration(12000);
             });
         });
     }

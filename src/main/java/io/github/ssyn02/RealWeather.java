@@ -5,7 +5,6 @@ import io.github.ssyn02.command.RealWeatherRootCommand;
 import io.github.ssyn02.util.RealWeatherTabCompleter;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 import net.kyori.adventure.text.Component;
 
@@ -26,7 +25,9 @@ public final class RealWeather extends JavaPlugin {
         loadSettings();
 
         weatherFetch = new WeatherFetch(this);
-        weatherFetch.fetchWeather(city, apiKey);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> {
+            weatherFetch.fetchWeather(city, apiKey);
+        }, 0, 12000);
 
         getServer().getConsoleSender().sendMessage(onEnableText);
         getCommand("realweather").setExecutor(new RealWeatherRootCommand(this));
@@ -53,20 +54,6 @@ public final class RealWeather extends JavaPlugin {
         getLogger().info("Loaded API key and city from saved config.");
     }
 
-    public void clear(){
-        Bukkit.getWorlds().forEach(world -> {
-            world.setStorm(false);
-            world.setThundering(false);
-        });
-    }
-
-    public void rain(){
-        Bukkit.getWorlds().forEach(world -> {
-            world.setStorm(true);
-            world.setThundering(true);
-        });
-    }
-
     public void setApiKey(String key) {
         this.apiKey = key;
         getConfig().set("apikey", key);
@@ -79,15 +66,4 @@ public final class RealWeather extends JavaPlugin {
         saveConfig();
     }
 
-    public String getApiKey() {
-        return apiKey;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public WeatherFetch getWeatherFetcher() {
-        return weatherFetch;
-    }
 }
